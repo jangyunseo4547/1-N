@@ -38,5 +38,85 @@ class Article(models.Model):
 `python manage.py migrate`
 
 ## Create 구현
+- `articles앱 내에 (forms.py)`
+```python
+from django.forms import ModelForm
+from .models import Article
 
-메소드가 post면 csrf token을 넣어야 함.
+class ArticleForm(ModelForm):
+    class Meta():
+        model = Article
+        fields = '__all__' # 모든 필드를 불러옴.
+```
+
+- `(urls.py)`
+```python
+# create
+    path('create/', views.create, name = 'create'), 
+    # new와 create 한번에 처리
+```
+
+- `views.py`
+```python
+def create(request):
+    if request.method == 'POST':
+        form = ArticleForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect('articles:index')
+    
+    else:     # 1. GET 요청 : 비어있는 form (new) 먼저 만들기 
+        form = ArticleForm()
+
+    context = {
+        'form':form,
+    }
+
+    return render(request, 'create.html', context)
+```
+
+- `create.html` 
+```python
+{% extends 'base.html' %}
+
+{% block body %}
+<form action="" method="POST">
+    {% csrf_token %} # 메소드가 post면 csrf token을 넣어야 함.
+    {{form}}
+    <input type="submit">
+</form>
+{% endblock %}
+```
+
+## Read 구현
+
+
+
+## update 구현
+- `urls.py`
+```python
+path('<int:id>/update/', views.update, name= 'update'),
+```
+
+- `views.py`
+```python 
+def update(request, id):
+    # if와 else가 중복되므로 업데이트할 아이디 찾기
+    article = Article.objects.get(id=id) 
+    
+    if request.method == 'POST':
+            form = ArticleForm(request.POST, instance=article) # request.POST = 새로운 정보, instance = 기존 정보
+            if form.is_valid(): # form에 대해 유효성 검사
+                form.save()
+                return redirect('articles:index')
+
+    else:
+        form = ArticleForm(instance=article) #instance
+
+    context = {
+        'form':form,
+    }
+
+    return render(request, 'update.html', context)
+```
