@@ -16,4 +16,8 @@ urlpatterns = [
 
     # Delete
     path('<int:id>/delete/', views.delete, name = 'delete'),
+
+    # Commnet
+    # Create
+    path('<int:article_id>/comments/create/', views.comment_create, name = 'comment_create'),
 ]

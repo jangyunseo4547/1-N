@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import ArticleForm
+from .forms import ArticleForm, CommentForm
 from .models import Article
 
 # Create your views here.
@@ -29,11 +29,13 @@ def index(request):
 
     return render(request, 'index.html', context)
 
-def detail(request,id):
+def detail(request,id): # 게시글 보여주기
     article = Article.objects.get(id=id)
+    form = CommentForm()
 
     context = {
         'article':article,
+        'form':form,
     }
 
     return render(request, 'detail.html', context)
@@ -60,3 +62,18 @@ def delete(reqeust, id):
     article.delete()
 
     return redirect('articles:index')
+
+
+def comment_create(request, article_id):
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)   # 댓글 완전히 저장 x , 줘야 할 정보가 남아있음.
+            
+            article = Article.objects.get(id=article_id) # 내가 속한 부모가 되는 정보를 찾음.
+            comment.article = article
+            comment.save()
+
+            return redirect('articles:detail', id=article_id)
+    else:
+        return redirect('articles:index')

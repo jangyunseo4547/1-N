@@ -26,6 +26,7 @@
 </body>
 ```
 ## modeling
+- 1) 
 ```python
 class Article(models.Model):
     title = models.CharField(max_length =100)
@@ -35,7 +36,17 @@ class Article(models.Model):
     updated_at = models.DateTimeField(auto_now = True) 
     # 현재 시간을 자동 저장
 ```
+
+- 2) 
+```python
+class comment(models.Model):
+    content = models.TextField()
+    article = models.ForeignKey(Article, on_delete=models.CASCADE) 
+    # 외래 키 : 부모의 아이디값이 저장되는 공간 / 
+    # on_delete : 부모가 지워졌을때 / CASCADE :부모, 자식 모두 지워주는
+```
 ## migraions
+- 모델링 한 이후에는 반드시 마이그레이션 해야 함.
 `python manage.py makemigrations`
 `python manage.py migrate`
 
@@ -122,3 +133,9 @@ def update(request, id):
 
     return render(request, 'update.html', context)
 ```
+
+## comment create
+
+
+`IntegrityError at /articles/7/comments/create/`
+    - `NOT NULL constraint failed:` : article_id를 빠뜨림.
