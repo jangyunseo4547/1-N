@@ -167,9 +167,17 @@ def update(request, id):
 
     <hr> 
 
-    {% for comment in article.comment_set.all %} # article이 가지고 있는 자식 article을 모두 가져옴.
-    # {% for comment in comments %}
+    {% for comment in comments %} 
+        <li>{{comment.content}}</li>
+    # article이 가지고 있는 자식 article을 모두 가져옴.
+    
     {% endfor %}
 
 {% endblock %}
 ```
+### update
+- 댓글 수정 (개발자 모드)
+`li 태그를 input으로 변경`
+
+
+##
