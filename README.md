@@ -7,6 +7,8 @@
     - 테이블 1 : id(post) / title, comment
     - 테이블 2 : id (primary key) / post_id / comments
 
+- ex : github
+
 ## 0. django 설정
 `pip install django`
 - 프로젝트 생성 django-admin startproject crud . (. 현재 파일에 생성)
