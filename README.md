@@ -8,12 +8,11 @@
     - 테이블 2 : id (primary key) / post_id / comments
 
 ## 0. django 설정
-pip install django
+`pip install django`
+- 프로젝트 생성 django-admin startproject crud . (. 현재 파일에 생성)
+- 앱 생성 django-admin startapp posts (posts라는 앱 생성)
+- 앱 등록 (setting)
+    posts (앱 이름 적어주기) 
 
-프로젝트 생성 django-admin startproject crud . (. 현재 파일에 생성)
-
-앱 생성 django-admin startapp posts (posts라는 앱 생성)
-
-앱 등록 (setting)
-
-posts (앱 이름 적어주기) 
+- temlates 폴더 생성 
+    `'DIRS': [BASE_DIR / 'templates'],`
