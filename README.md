@@ -26,7 +26,7 @@
 </body>
 ```
 ## modeling
-- 1) 
+- 1) 게시글 (첫번째 테이블)
 ```python
 class Article(models.Model):
     title = models.CharField(max_length =100)
@@ -37,7 +37,7 @@ class Article(models.Model):
     # 현재 시간을 자동 저장
 ```
 
-- 2) 
+- 2) 댓글 기능 구현 (두번째 테이블)
 ```python
 class comment(models.Model):
     content = models.TextField()
@@ -119,7 +119,8 @@ def update(request, id):
     article = Article.objects.get(id=id) 
     
     if request.method == 'POST':
-            form = ArticleForm(request.POST, instance=article) # request.POST = 새로운 정보, instance = 기존 정보
+            form = ArticleForm(request.POST, instance=article) 
+            # request.POST = 새로운 정보, instance = 기존 정보
             if form.is_valid(): # form에 대해 유효성 검사
                 form.save()
                 return redirect('articles:index')
@@ -143,6 +144,11 @@ def update(request, id):
 
 ## 
 `views.py - def detail`
+```python
+comments = article.comment_set.all() # 해당하는 게시글에 속하는 댓글만 불러옴.
+
+'comments':comments,
+```
 `detail.html`
 ```python
 {% extends 'base.html' %}
@@ -175,9 +181,36 @@ def update(request, id):
 
 {% endblock %}
 ```
-### update
+### comment update
 - 댓글 수정 (개발자 모드)
 `li 태그를 input으로 변경`
 
 
-##
+## comment delete
+- `urls.py`
+```python
+ # Delete
+    path('<int:article_id>/comments/<int:id>/delete', views.comment_delete, name = 'comment_delete'),
+    #article/2/comments/2/delete
+```
+
+- `views.py`
+```python
+def comment_delete(request, article_id, id): # id의 id값을 찾음.
+    comment = Comment.objects.get(id=id)
+    comment.delete()
+
+    return redirect('articles:detail', id=article_id) # detail로 돌아감.
+```
+
+- `detail.html`
+```python
+<hr> 
+
+    {% for comment in comments %}
+        <li>{{comment.content}}</li>
+        <a href="{% url 'articles:comment_delete' article.id comment.id %}">delete</a>
+    {% endfor %}
+
+{% endblock %}
+```
