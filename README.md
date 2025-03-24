@@ -14,5 +14,29 @@
 - 앱 등록 (setting)
     posts (앱 이름 적어주기) 
 
-- temlates 폴더 생성 
+- 밖에 temlates 폴더 생성 
     `'DIRS': [BASE_DIR / 'templates'],`
+- teplates에 `base.html`
+```shell
+<body> 
+    {% block body %} # 기본 틀 만들고 난 이후
+    {% endblock %}
+</body>
+```
+## modeling
+```python
+class Article(models.Model):
+    title = models.CharField(max_length =100)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add = True) 
+    # 수정되는 시간을 자동 저장
+    updated_at = models.DateTimeField(auto_now = True) 
+    # 현재 시간을 자동 저장
+```
+## migraions
+`python manage.py makemigrations`
+`python manage.py migrate`
+
+## Create 구현
+
+메소드가 post면 csrf token을 넣어야 함.
