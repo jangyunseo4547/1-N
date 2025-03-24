@@ -139,3 +139,37 @@ def update(request, id):
 
 `IntegrityError at /articles/7/comments/create/`
     - `NOT NULL constraint failed:` : article_id를 빠뜨림.
+
+
+## 
+`views.py - def detail`
+`detail.html`
+```python
+{% extends 'base.html' %}
+
+{% block body %}
+
+    <h3>{{article.title}}</h3>
+    <p>{{article.content}}</p>
+    <p>{{article.created_at}}</p>
+    <p>{{article.updated_at}}</p>
+    
+    <a href="{% url 'articles:update' article.id %}">update</a>
+    <a href="{% url 'articles:delete' article.id %}">delete</a>
+
+    <hr>
+
+    <form action="{% url 'articles:comment_create' article.id %}" method="POST">
+        {% csrf_token %}
+        {{form}}
+        <input type="submit">
+    </form>
+
+    <hr> 
+
+    {% for comment in article.comment_set.all %} # article이 가지고 있는 자식 article을 모두 가져옴.
+    # {% for comment in comments %}
+    {% endfor %}
+
+{% endblock %}
+```

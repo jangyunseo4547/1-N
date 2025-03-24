@@ -31,11 +31,13 @@ def index(request):
 
 def detail(request,id): # 게시글 보여주기
     article = Article.objects.get(id=id)
+    comments = article.comment_set.all() # 해당하는 게시글에 속하는 댓글만 불러옴.
     form = CommentForm()
 
     context = {
         'article':article,
         'form':form,
+        'comments':comments,
     }
 
     return render(request, 'detail.html', context)
